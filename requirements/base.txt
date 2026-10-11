@@ -1,0 +1,13 @@
+Django
+djangorestframework
+django-filter
+drf-spectacular
+psycopg[binary]
+django-environ
+requests
+feedparser
+beautifulsoup4
+anthropic
+pydantic
+vaderSentiment
+gunicorn
