@@ -89,3 +89,23 @@ erDiagram
     int records_failed
   }
 ```
+
+## Source fields (BBC News RSS)
+
+Explored on 2026-10-12 with `scratch/explore_feed.py` on the BBC Top Stories feed (31 entries, parsed cleanly).
+
+| Field | Used for | Notes |
+|---|---|---|
+| title | Article.title | present in 31 of 31 entries |
+| link | Article.url | present in 31 of 31; contains tracking parameters |
+| summary | Article.description | present in 31 of 31; plain text in this feed |
+| published_parsed | Article.published_at | time tuple in UTC, not a string |
+| id | possible unique id | present in 31 of 31 |
+| author | not used | missing in 31 of 31 |
+
+### Edge cases to handle
+- Links end in tracking parameters (`?at_medium=RSS&at_campaign=rss`). Normalise the URL (drop the query string) before hashing, so the same article is not stored twice.
+- `published_parsed` is a UTC time tuple and can be missing in other feeds; the extractor must not crash on `None`.
+- Summaries may contain HTML in other feeds, so the transform stage must strip tags.
+- The same story can appear in more than one feed (Top Stories and Business), so de-duplication by URL hash is essential.
+- Other feeds may have missing fields; always use `.get()` instead of direct indexing.
