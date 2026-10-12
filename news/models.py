@@ -76,3 +76,67 @@ class Article(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class ArticleEnrichment(models.Model):
+    """Sentiment, topic and summary produced for one article."""
+
+    class Sentiment(models.TextChoices):
+        POSITIVE = "positive", "Positive"
+        NEUTRAL = "neutral", "Neutral"
+        NEGATIVE = "negative", "Negative"
+
+    class Topic(models.TextChoices):
+        POLITICS = "politics", "Politics"
+        BUSINESS = "business", "Business"
+        TECHNOLOGY = "technology", "Technology"
+        SPORTS = "sports", "Sports"
+        HEALTH = "health", "Health"
+        SCIENCE = "science", "Science"
+        ENTERTAINMENT = "entertainment", "Entertainment"
+        WORLD = "world", "World"
+        OTHER = "other", "Other"
+
+    article = models.OneToOneField(
+        Article, on_delete=models.CASCADE, related_name="enrichment"
+    )
+    sentiment_label = models.CharField(
+        max_length=10, choices=Sentiment.choices, db_index=True
+    )
+    sentiment_score = models.FloatField()  # -1.0 to 1.0
+    vader_score = models.FloatField(null=True, blank=True)
+    topic = models.CharField(max_length=20, choices=Topic.choices, db_index=True)
+    entities = models.JSONField(default=list, blank=True)
+    summary = models.TextField(blank=True)
+    model_name = models.CharField(max_length=100, blank=True)
+    prompt_version = models.CharField(max_length=20, blank=True)
+    input_tokens = models.IntegerField(default=0)
+    output_tokens = models.IntegerField(default=0)
+    processed_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.article_id}: {self.sentiment_label} / {self.topic}"
+
+
+class DailyTopicSentiment(models.Model):
+    """Average sentiment for one topic on one day."""
+
+    date = models.DateField()
+    topic = models.CharField(max_length=20)
+    avg_sentiment = models.FloatField()
+    article_count = models.IntegerField(default=0)
+    positive_count = models.IntegerField(default=0)
+    neutral_count = models.IntegerField(default=0)
+    negative_count = models.IntegerField(default=0)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["date", "topic"], name="unique_date_topic"
+            )
+        ]
+        ordering = ["-date", "topic"]
+
+    def __str__(self):
+        return f"{self.date} {self.topic}: {self.avg_sentiment:.2f}"
