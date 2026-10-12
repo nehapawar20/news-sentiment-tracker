@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>Sample News</title>
+    <link>https://example.com/</link>
+    <description>Sample feed for tests</description>
+    <item>
+      <title>First story</title>
+      <description>Summary of the first story.</description>
+      <link>https://example.com/news/story-one?at_medium=RSS&amp;at_campaign=rss</link>
+      <guid isPermaLink="false">story-one</guid>
+      <pubDate>Mon, 12 Oct 2026 05:00:52 GMT</pubDate>
+    </item>
+    <item>
+      <title>Second story</title>
+      <description>Summary of the second story.</description>
+      <link>https://example.com/news/story-two</link>
+      <guid isPermaLink="false">story-two</guid>
+      <pubDate>Mon, 12 Oct 2026 06:30:00 GMT</pubDate>
+    </item>
+    <item>
+      <title>Third story (no date)</title>
+      <description>This entry has no publication date.</description>
+      <link>https://example.com/news/story-three</link>
+      <guid isPermaLink="false">story-three</guid>
+    </item>
+  </channel>
+</rss>
