@@ -82,9 +82,16 @@ def test_http_error_raises():
     source = SourceFactory()
     responses.add(responses.GET, source.feed_url, status=500)
 
-    with pytest.raises(requests.HTTPError):
+    with pytest.raises(requests.RequestException):
         RSSExtractor().fetch(source)
 
+@responses.activate
+def test_not_found_raises_http_error():
+    source = SourceFactory()
+    responses.add(responses.GET, source.feed_url, status=404)
+
+    with pytest.raises(requests.HTTPError):
+        RSSExtractor().fetch(source)
 
 @responses.activate
 def test_command_survives_one_failing_source():
