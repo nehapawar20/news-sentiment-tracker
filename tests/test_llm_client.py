@@ -57,7 +57,7 @@ def test_memory_limits_are_sent():
 
     sent = json.loads(responses.calls[0].request.body)
     assert sent["keep_alive"] == "30s"
-    assert sent["options"]["num_ctx"] == 1024
+    assert sent["options"]["num_ctx"] == 2048
 
 
 @responses.activate
@@ -97,3 +97,13 @@ def test_defaults_come_from_settings(settings):
 
     assert client.model == "my-model"
     assert client.base_url == "http://example.local:1234"
+
+@responses.activate
+def test_temperature_can_be_overridden():
+    responses.add(responses.POST, URL, json=ollama_reply(), status=200)
+    client = LLMClient(model="m", base_url=BASE)
+
+    client.complete("s", "u", temperature=0.3)
+
+    sent = json.loads(responses.calls[0].request.body)
+    assert sent["options"]["temperature"] == 0.3

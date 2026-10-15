@@ -37,7 +37,11 @@ class LLMClient:
         self._session.mount("http://", HTTPAdapter(max_retries=retry))
 
     def complete(
-        self, system: str, user: str, json_mode: bool = False
+        self,
+        system: str,
+        user: str,
+        json_mode: bool = False,
+        temperature: float = 0.0,
     ) -> tuple[str, dict]:
         """Send one prompt. Returns (reply text, token usage)."""
         payload = {
@@ -49,9 +53,9 @@ class LLMClient:
                 {"role": "user", "content": user},
             ],
             "options": {
-                "temperature": 0,
+                "temperature": temperature,
                 "num_predict": self.max_tokens,
-                "num_ctx": 1024,
+                "num_ctx": 2048,
             },
         }
         if json_mode:
