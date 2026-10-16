@@ -4,6 +4,7 @@ import pytest
 
 from pipeline.enrichment.classifier import EnrichmentError, classify_article
 from pipeline.enrichment.llm_client import LLMUnavailableError
+from tests.fakes import FakeLLM
 
 GOOD = json.dumps(
     {
@@ -14,21 +15,6 @@ GOOD = json.dumps(
         "summary": "Something bad happened.",
     }
 )
-
-
-class FakeLLM:
-    def __init__(self, replies):
-        self.replies = list(replies)
-        self.calls = []
-
-    def complete(self, system, user, json_mode=False, temperature=0.0):
-        self.calls.append(
-            {"user": user, "json_mode": json_mode, "temperature": temperature}
-        )
-        reply = self.replies.pop(0)
-        if isinstance(reply, Exception):
-            raise reply
-        return reply, {"input_tokens": 10, "output_tokens": 5}
 
 
 def test_returns_result_and_usage():
