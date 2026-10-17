@@ -76,8 +76,8 @@ WSGI_APPLICATION = "config.wsgi.application"
 
 DATABASES = {"default": env.db("DATABASE_URL")}
 
-ANTHROPIC_API_KEY = env("ANTHROPIC_API_KEY", default="")
-
+LLM_BASE_URL = env("LLM_BASE_URL", default="http://localhost:11434")
+LLM_MODEL = env("LLM_MODEL", default="qwen2.5:0.5b")
 
 # Password validation
 # https://docs.djangoproject.com/en/6.1/ref/settings/#auth-password-validators

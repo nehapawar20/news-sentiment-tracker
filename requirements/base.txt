@@ -7,7 +7,6 @@ django-environ
 requests
 feedparser
 beautifulsoup4
-anthropic
 pydantic
 vaderSentiment
 gunicorn
