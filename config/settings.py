@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "news",
     "pipeline",
+    "rest_framework",
+    "django_filters",
 ]
 
 MIDDLEWARE = [
@@ -141,4 +143,12 @@ LOGGING = {
         "pipeline": {"handlers": ["console"], "level": "INFO", "propagate": False},
         "news": {"handlers": ["console"], "level": "INFO", "propagate": False},
     },
+}
+REST_FRAMEWORK = {
+    "DEFAULT_PAGINATION_CLASS": "news.api.pagination.StandardPagination",
+    "DEFAULT_FILTER_BACKENDS": [
+        "django_filters.rest_framework.DjangoFilterBackend",
+        "rest_framework.filters.SearchFilter",
+        "rest_framework.filters.OrderingFilter",
+    ],
 }
