@@ -13,3 +13,12 @@ ignore = ["RUF012"]
 DJANGO_SETTINGS_MODULE = "config.settings"
 pythonpath = ["."]
 addopts = "-q"
+
+[tool.coverage.run]
+source = ["news", "pipeline"]
+omit = ["*/migrations/*"]
+
+[tool.coverage.report]
+show_missing = true
+skip_empty = true
+fail_under = 70
