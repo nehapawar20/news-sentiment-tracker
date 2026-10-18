@@ -48,3 +48,7 @@ ruff check .
 ```
 
 See `docs/` for requirements, architecture and data-quality rules.
+
+## Dashboard
+
+Run `python manage.py runserver` and open http://127.0.0.1:8000/ to see sentiment trends by topic, article counts per topic and the latest headlines. The API documentation is at http://127.0.0.1:8000/api/docs/.

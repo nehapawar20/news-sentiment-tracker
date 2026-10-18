@@ -1,0 +1,84 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>News Sentiment Tracker</title>
+  <link rel="stylesheet" href="{% static 'dashboard/dashboard.css' %}">
+</head>
+<body>
+  <header>
+    <div>
+      <h1>News Sentiment Tracker</h1>
+      <p id="updated">Loading...</p>
+    </div>
+    <nav>
+      <a href="/api/docs/">API docs</a>
+      <a href="/admin/">Admin</a>
+    </nav>
+  </header>
+
+  <main>
+    <form id="filters" class="filters">
+      <label>Topic
+        <select id="topic">
+          <option value="">All topics</option>
+          {% for value, label in topics %}
+          <option value="{{ value }}">{{ label }}</option>
+          {% endfor %}
+        </select>
+      </label>
+      <label>From
+        <input type="date" id="from">
+      </label>
+      <label>To
+        <input type="date" id="to">
+      </label>
+      <button type="submit">Apply</button>
+      <button type="button" id="reset" class="secondary">Reset</button>
+    </form>
+
+    <p id="error" class="error" role="alert" hidden></p>
+
+    <section class="grid">
+      <article class="card">
+        <h2>Average sentiment over time</h2>
+        <div class="chart"><canvas id="trend-chart"></canvas></div>
+        <p id="trend-empty" class="empty" hidden>
+          No daily data for this selection. Run
+          <code>python manage.py aggregate_daily --days 30</code> to create it.
+        </p>
+      </article>
+
+      <article class="card">
+        <h2>Articles per topic</h2>
+        <div class="chart"><canvas id="topic-chart"></canvas></div>
+        <p id="topic-empty" class="empty" hidden>No enriched articles for this date range.</p>
+      </article>
+    </section>
+
+    <section class="card">
+      <h2>Latest headlines <span id="count" class="muted"></span></h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Published</th>
+              <th>Headline</th>
+              <th>Source</th>
+              <th>Topic</th>
+              <th>Sentiment</th>
+            </tr>
+          </thead>
+          <tbody id="articles"></tbody>
+        </table>
+      </div>
+      <p id="articles-empty" class="empty" hidden>No articles match this selection.</p>
+    </section>
+  </main>
+
+  <script src="{% static 'dashboard/chart.umd.min.js' %}"></script>
+  <script src="{% static 'dashboard/dashboard.js' %}"></script>
+</body>
+</html>

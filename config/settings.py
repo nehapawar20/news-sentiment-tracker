@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "news",
     "pipeline",
+    "dashboard",
     "rest_framework",
     "django_filters",
     "drf_spectacular",
