@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "pipeline",
     "rest_framework",
     "django_filters",
+    "drf_spectacular",
 ]
 
 MIDDLEWARE = [
@@ -151,4 +152,17 @@ REST_FRAMEWORK = {
         "rest_framework.filters.SearchFilter",
         "rest_framework.filters.OrderingFilter",
     ],
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+    "DEFAULT_THROTTLE_CLASSES": ["rest_framework.throttling.AnonRateThrottle"],
+    "DEFAULT_THROTTLE_RATES": {
+        "anon": env("API_THROTTLE_ANON", default="1000/hour"),
+    },
+}
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "News Sentiment Tracker API",
+    "DESCRIPTION": "Read-only API for news articles, their sentiment and topic, "
+    "and daily trends.",
+    "VERSION": "0.3.0",
+    "SERVE_INCLUDE_SCHEMA": False,
 }

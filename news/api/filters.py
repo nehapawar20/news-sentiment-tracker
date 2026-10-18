@@ -1,6 +1,7 @@
 import django_filters
 
 from news.models import Article, ArticleEnrichment
+from pipeline.models import PipelineRun
 
 
 class ArticleFilter(django_filters.FilterSet):
@@ -30,3 +31,8 @@ class ArticleFilter(django_filters.FilterSet):
     class Meta:
         model = Article
         fields = []
+        
+class PipelineRunFilter(django_filters.FilterSet):
+    class Meta:
+        model = PipelineRun
+        fields = ["stage", "status"]
