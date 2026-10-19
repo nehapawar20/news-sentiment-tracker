@@ -28,9 +28,7 @@ class Command(BaseCommand):
             )
 
         ids = list(
-            ArticleEnrichment.objects.order_by("article_id").values_list(
-                "article_id", flat=True
-            )
+            ArticleEnrichment.objects.order_by("article_id").values_list("article_id", flat=True)
         )
         if not ids:
             raise CommandError("No enriched articles yet. Run enrich_articles first.")

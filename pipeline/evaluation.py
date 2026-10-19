@@ -24,8 +24,7 @@ def majority_baseline(human_labels) -> float:
 def confusion_matrix(pairs) -> dict:
     counts = Counter(pairs)
     return {
-        human: {predicted: counts[(human, predicted)] for predicted in LABELS}
-        for human in LABELS
+        human: {predicted: counts[(human, predicted)] for predicted in LABELS} for human in LABELS
     }
 
 

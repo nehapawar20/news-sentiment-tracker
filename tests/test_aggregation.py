@@ -71,9 +71,7 @@ def test_only_articles_of_that_utc_day_are_counted():
     aggregate_day(date(2026, 10, 13))
 
     assert DailyTopicSentiment.objects.get(date=DAY, topic="business").article_count == 1
-    next_day = DailyTopicSentiment.objects.get(
-        date=date(2026, 10, 13), topic="business"
-    )
+    next_day = DailyTopicSentiment.objects.get(date=date(2026, 10, 13), topic="business")
     assert next_day.article_count == 1
 
 
@@ -109,16 +107,12 @@ def test_new_data_updates_the_existing_row():
 
 def test_stale_topic_row_is_removed():
     make_enriched(at(DAY), topic="business")
-    DailyTopicSentiment.objects.create(
-        date=DAY, topic="sports", avg_sentiment=0.9, article_count=4
-    )
+    DailyTopicSentiment.objects.create(date=DAY, topic="sports", avg_sentiment=0.9, article_count=4)
 
     result = aggregate_day(DAY)
 
     assert result["deleted"] == 1
-    assert list(DailyTopicSentiment.objects.values_list("topic", flat=True)) == [
-        "business"
-    ]
+    assert list(DailyTopicSentiment.objects.values_list("topic", flat=True)) == ["business"]
 
 
 def test_command_back_fills_several_days_and_records_the_run():

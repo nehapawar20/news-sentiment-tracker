@@ -48,9 +48,7 @@ class Command(BaseCommand):
 
         ids = [int(r["id"]) for r in rows]
         articles = Article.objects.in_bulk(ids)
-        saved = {
-            e.article_id: e for e in ArticleEnrichment.objects.filter(article_id__in=ids)
-        }
+        saved = {e.article_id: e for e in ArticleEnrichment.objects.filter(article_id__in=ids)}
         rerun = options["rerun"]
         client = self.build_client() if rerun else None
 
@@ -74,9 +72,7 @@ class Command(BaseCommand):
             llm = None
             if rerun:
                 try:
-                    result, _usage = classify_article(
-                        client, article.title, article.description
-                    )
+                    result, _usage = classify_article(client, article.title, article.description)
                     llm = result.sentiment
                     versions[PROMPT_VERSION] += 1
                 except EnrichmentError:

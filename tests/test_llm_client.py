@@ -98,6 +98,7 @@ def test_defaults_come_from_settings(settings):
     assert client.model == "my-model"
     assert client.base_url == "http://example.local:1234"
 
+
 @responses.activate
 def test_temperature_can_be_overridden():
     responses.add(responses.POST, URL, json=ollama_reply(), status=200)

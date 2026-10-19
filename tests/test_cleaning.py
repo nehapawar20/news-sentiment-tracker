@@ -55,23 +55,17 @@ def test_parse_published_from_time_tuple():
 def test_parse_published_from_list():
     # JSON stores tuples as lists, so saved payloads look like this.
     entry = {"published_parsed": [2026, 10, 12, 5, 0, 52, 0, 285, 0]}
-    assert parse_published(entry, FALLBACK) == datetime(
-        2026, 10, 12, 5, 0, 52, tzinfo=UTC
-    )
+    assert parse_published(entry, FALLBACK) == datetime(2026, 10, 12, 5, 0, 52, tzinfo=UTC)
 
 
 def test_parse_published_from_iso_string():
     entry = {"published": "2026-10-12T05:00:52+00:00"}
-    assert parse_published(entry, FALLBACK) == datetime(
-        2026, 10, 12, 5, 0, 52, tzinfo=UTC
-    )
+    assert parse_published(entry, FALLBACK) == datetime(2026, 10, 12, 5, 0, 52, tzinfo=UTC)
 
 
 def test_parse_published_converts_offset_to_utc():
     entry = {"published": "2026-10-12T10:30:52+05:30"}
-    assert parse_published(entry, FALLBACK) == datetime(
-        2026, 10, 12, 5, 0, 52, tzinfo=UTC
-    )
+    assert parse_published(entry, FALLBACK) == datetime(2026, 10, 12, 5, 0, 52, tzinfo=UTC)
 
 
 def test_parse_published_assumes_utc_for_naive_iso_string():

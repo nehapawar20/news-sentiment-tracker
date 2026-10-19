@@ -60,11 +60,15 @@ def test_daily_topic_sentiment_rejects_duplicate_date_and_topic():
 
 def test_daily_topic_sentiment_allows_same_topic_on_different_days():
     DailyTopicSentiment.objects.create(
-        date=datetime.date(2026, 10, 12), topic="business",
-        avg_sentiment=0.1, article_count=3,
+        date=datetime.date(2026, 10, 12),
+        topic="business",
+        avg_sentiment=0.1,
+        article_count=3,
     )
     DailyTopicSentiment.objects.create(
-        date=datetime.date(2026, 10, 13), topic="business",
-        avg_sentiment=0.3, article_count=4,
+        date=datetime.date(2026, 10, 13),
+        topic="business",
+        avg_sentiment=0.3,
+        article_count=4,
     )
     assert DailyTopicSentiment.objects.count() == 2

@@ -29,9 +29,7 @@ class FakeLLM:
         self.calls = []
 
     def complete(self, system, user, json_mode=False, temperature=0.0):
-        self.calls.append(
-            {"user": user, "json_mode": json_mode, "temperature": temperature}
-        )
+        self.calls.append({"user": user, "json_mode": json_mode, "temperature": temperature})
         reply = self.replies.pop(0) if self.replies else self.default
         if reply is None:
             raise AssertionError("FakeLLM was called but has no reply left")

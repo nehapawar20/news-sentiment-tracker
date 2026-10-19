@@ -85,6 +85,7 @@ def test_http_error_raises():
     with pytest.raises(requests.RequestException):
         RSSExtractor().fetch(source)
 
+
 @responses.activate
 def test_not_found_raises_http_error():
     source = SourceFactory()
@@ -92,6 +93,7 @@ def test_not_found_raises_http_error():
 
     with pytest.raises(requests.HTTPError):
         RSSExtractor().fetch(source)
+
 
 @responses.activate
 def test_command_survives_one_failing_source():

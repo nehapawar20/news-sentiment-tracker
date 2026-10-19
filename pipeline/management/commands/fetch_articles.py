@@ -18,9 +18,7 @@ class Command(BaseCommand):
         parser.add_argument(
             "--source", type=str, help="Only fetch the source with this exact name."
         )
-        parser.add_argument(
-            "--limit", type=int, help="Keep at most this many entries per feed."
-        )
+        parser.add_argument("--limit", type=int, help="Keep at most this many entries per feed.")
 
     def handle(self, *args, **options):
         sources = Source.objects.filter(is_active=True)
@@ -43,9 +41,7 @@ class Command(BaseCommand):
                 new_count = load_raw_articles(source, items)
                 total_in += len(items)
                 total_new += new_count
-                logger.info(
-                    "%s: %d fetched, %d new", source.name, len(items), new_count
-                )
+                logger.info("%s: %d fetched, %d new", source.name, len(items), new_count)
             except Exception as exc:  # one broken feed must not stop the others
                 failed_sources += 1
                 errors.append(f"{source.name}: {exc}")
@@ -68,7 +64,6 @@ class Command(BaseCommand):
 
         self.stdout.write(
             self.style.SUCCESS(
-                f"{status}: {total_in} fetched, {total_new} new, "
-                f"{failed_sources} source(s) failed."
+                f"{status}: {total_in} fetched, {total_new} new, {failed_sources} source(s) failed."
             )
         )

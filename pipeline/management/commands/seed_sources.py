@@ -29,7 +29,6 @@ class Command(BaseCommand):
                 created_count += 1
         self.stdout.write(
             self.style.SUCCESS(
-                f"Done. {created_count} created, "
-                f"{len(SOURCES) - created_count} already existed."
+                f"Done. {created_count} created, {len(SOURCES) - created_count} already existed."
             )
         )

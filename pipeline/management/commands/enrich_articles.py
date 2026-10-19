@@ -51,11 +51,7 @@ class Command(BaseCommand):
         stats = enrich_pending(self.build_client(), limit, options["sleep"])
 
         if stats.aborted:
-            status = (
-                PipelineRun.Status.PARTIAL
-                if stats.enriched
-                else PipelineRun.Status.FAILED
-            )
+            status = PipelineRun.Status.PARTIAL if stats.enriched else PipelineRun.Status.FAILED
         elif stats.failed == 0:
             status = PipelineRun.Status.SUCCESS
         elif stats.enriched == 0:

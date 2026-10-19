@@ -73,9 +73,7 @@ class TopicSummaryView(APIView):
             )
             .order_by("-article_count", "topic")
         )
-        data = [
-            {**row, "avg_sentiment": round(row["avg_sentiment"], 4)} for row in rows
-        ]
+        data = [{**row, "avg_sentiment": round(row["avg_sentiment"], 4)} for row in rows]
         return Response(TopicSummarySerializer(data, many=True).data)
 
 

@@ -11,12 +11,9 @@ def normalise_url(url: str) -> str:
     kept = [
         (key, value)
         for key, value in parse_qsl(parts.query, keep_blank_values=True)
-        if not key.lower().startswith(TRACKING_PREFIXES)
-        and key.lower() not in TRACKING_PARAMS
+        if not key.lower().startswith(TRACKING_PREFIXES) and key.lower() not in TRACKING_PARAMS
     ]
-    return urlunsplit(
-        (parts.scheme, parts.netloc, parts.path, urlencode(kept), "")
-    )
+    return urlunsplit((parts.scheme, parts.netloc, parts.path, urlencode(kept), ""))
 
 
 def make_url_hash(url: str) -> str:

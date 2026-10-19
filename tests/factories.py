@@ -22,9 +22,7 @@ class RawArticleFactory(factory.django.DjangoModelFactory):
 
     source = factory.SubFactory(SourceFactory)
     url = factory.Sequence(lambda n: f"https://example.com/story/{n}")
-    url_hash = factory.LazyAttribute(
-        lambda obj: hashlib.sha256(obj.url.encode()).hexdigest()
-    )
+    url_hash = factory.LazyAttribute(lambda obj: hashlib.sha256(obj.url.encode()).hexdigest())
     payload = factory.LazyFunction(lambda: {"title": "Test headline"})
     status = RawArticle.Status.NEW
 
@@ -39,6 +37,4 @@ class ArticleFactory(factory.django.DjangoModelFactory):
     url = factory.SelfAttribute("raw.url")
     description = "A short description."
     published_at = factory.LazyFunction(timezone.now)
-    content_hash = factory.LazyAttribute(
-        lambda obj: hashlib.sha256(obj.title.encode()).hexdigest()
-    )
+    content_hash = factory.LazyAttribute(lambda obj: hashlib.sha256(obj.title.encode()).hexdigest())
