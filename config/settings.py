@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.1/ref/settings/
 """
 
+import sys
 from pathlib import Path
 
 import environ
@@ -129,6 +130,24 @@ MAILERS = {
     },
 }
 
+# Under pytest we only log to the console, so test runs never write
+# fake errors into your real pipeline.log.
+TESTING = "pytest" in sys.modules
+
+_log_handlers = {
+    "console": {"class": "logging.StreamHandler", "formatter": "simple"},
+}
+if not TESTING:
+    (BASE_DIR / "logs").mkdir(exist_ok=True)
+    _log_handlers["file"] = {
+        "class": "logging.handlers.RotatingFileHandler",
+        "filename": str(BASE_DIR / "logs" / "pipeline.log"),
+        "maxBytes": 1_000_000,
+        "backupCount": 5,
+        "encoding": "utf-8",
+        "formatter": "simple",
+    }
+
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
@@ -138,14 +157,21 @@ LOGGING = {
             "style": "{",
         },
     },
-    "handlers": {
-        "console": {"class": "logging.StreamHandler", "formatter": "simple"},
-    },
+    "handlers": _log_handlers,
     "loggers": {
-        "pipeline": {"handlers": ["console"], "level": "INFO", "propagate": False},
-        "news": {"handlers": ["console"], "level": "INFO", "propagate": False},
+        "pipeline": {
+            "handlers": list(_log_handlers),
+            "level": "INFO",
+            "propagate": False,
+        },
+        "news": {
+            "handlers": list(_log_handlers),
+            "level": "INFO",
+            "propagate": False,
+        },
     },
 }
+
 REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "news.api.pagination.StandardPagination",
     "DEFAULT_FILTER_BACKENDS": [
