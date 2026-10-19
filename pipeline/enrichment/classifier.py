@@ -33,10 +33,6 @@ def classify_article(
             return parse_enrichment(text), usage_total
         except EnrichmentParseError as exc:
             last_error = f"{exc} | reply started: {text[:120]!r}"
-            logger.warning(
-                "Attempt %d of %d: invalid LLM reply (%s)", attempt, max_attempts, exc
-            )
+            logger.warning("Attempt %d of %d: invalid LLM reply (%s)", attempt, max_attempts, exc)
 
-    raise EnrichmentError(
-        f"No valid answer after {max_attempts} attempts: {last_error}"
-    )
+    raise EnrichmentError(f"No valid answer after {max_attempts} attempts: {last_error}")

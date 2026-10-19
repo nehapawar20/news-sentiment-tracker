@@ -79,9 +79,7 @@ class Command(BaseCommand):
             if result.status == PipelineRun.Status.FAILED:
                 failed.append(name)
                 if stop_on_failure:
-                    logger.error(
-                        "Stopping the run: the later stages depend on %s", name
-                    )
+                    logger.error("Stopping the run: the later stages depend on %s", name)
                     break
             elif result.status == PipelineRun.Status.PARTIAL:
                 logger.warning("Stage %s finished with warnings (partial)", name)
@@ -104,10 +102,7 @@ class Command(BaseCommand):
 
     def run_stage(self, name, stage, stage_options) -> StageResult:
         # Remember the newest run id, so we only look at the run THIS call creates.
-        last_id = (
-            PipelineRun.objects.filter(stage=stage).aggregate(last=Max("id"))["last"]
-            or 0
-        )
+        last_id = PipelineRun.objects.filter(stage=stage).aggregate(last=Max("id"))["last"] or 0
         logger.info("Stage %s starting", name)
         started = time.monotonic()
 
@@ -121,11 +116,7 @@ class Command(BaseCommand):
             return StageResult(name, PipelineRun.Status.FAILED, time.monotonic() - started)
 
         seconds = time.monotonic() - started
-        run = (
-            PipelineRun.objects.filter(stage=stage, id__gt=last_id)
-            .order_by("-id")
-            .first()
-        )
+        run = PipelineRun.objects.filter(stage=stage, id__gt=last_id).order_by("-id").first()
         if run is None:
             logger.error("Stage %s did not record a pipeline run", name)
             return StageResult(name, PipelineRun.Status.FAILED, seconds)
@@ -136,6 +127,4 @@ class Command(BaseCommand):
     def print_summary(self, results):
         self.stdout.write("\nPipeline summary")
         for result in results:
-            self.stdout.write(
-                f"  {result.name:20} {result.status:8} {result.seconds:6.1f}s"
-            )
+            self.stdout.write(f"  {result.name:20} {result.status:8} {result.seconds:6.1f}s")

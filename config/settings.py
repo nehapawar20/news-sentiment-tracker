@@ -188,8 +188,7 @@ REST_FRAMEWORK = {
 
 SPECTACULAR_SETTINGS = {
     "TITLE": "News Sentiment Tracker API",
-    "DESCRIPTION": "Read-only API for news articles, their sentiment and topic, "
-    "and daily trends.",
+    "DESCRIPTION": "Read-only API for news articles, their sentiment and topic, and daily trends.",
     "VERSION": "0.3.0",
     "SERVE_INCLUDE_SCHEMA": False,
 }

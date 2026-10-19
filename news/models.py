@@ -30,9 +30,7 @@ class RawArticle(models.Model):
         PROCESSED = "processed", "Processed"
         REJECTED = "rejected", "Rejected"
 
-    source = models.ForeignKey(
-        Source, on_delete=models.CASCADE, related_name="raw_articles"
-    )
+    source = models.ForeignKey(Source, on_delete=models.CASCADE, related_name="raw_articles")
     url = models.URLField(max_length=1000)
     url_hash = models.CharField(max_length=64, unique=True, db_index=True)
     payload = models.JSONField()
@@ -54,12 +52,8 @@ class Article(models.Model):
         DONE = "done", "Done"
         FAILED = "failed", "Failed"
 
-    raw = models.OneToOneField(
-        RawArticle, on_delete=models.CASCADE, related_name="article"
-    )
-    source = models.ForeignKey(
-        Source, on_delete=models.CASCADE, related_name="articles"
-    )
+    raw = models.OneToOneField(RawArticle, on_delete=models.CASCADE, related_name="article")
+    source = models.ForeignKey(Source, on_delete=models.CASCADE, related_name="articles")
     title = models.CharField(max_length=500)
     url = models.URLField(max_length=1000)
     description = models.TextField(blank=True)
@@ -97,12 +91,8 @@ class ArticleEnrichment(models.Model):
         WORLD = "world", "World"
         OTHER = "other", "Other"
 
-    article = models.OneToOneField(
-        Article, on_delete=models.CASCADE, related_name="enrichment"
-    )
-    sentiment_label = models.CharField(
-        max_length=10, choices=Sentiment.choices, db_index=True
-    )
+    article = models.OneToOneField(Article, on_delete=models.CASCADE, related_name="enrichment")
+    sentiment_label = models.CharField(max_length=10, choices=Sentiment.choices, db_index=True)
     sentiment_score = models.FloatField()  # -1.0 to 1.0
     vader_score = models.FloatField(null=True, blank=True)
     topic = models.CharField(max_length=20, choices=Topic.choices, db_index=True)
@@ -131,11 +121,7 @@ class DailyTopicSentiment(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        constraints = [
-            models.UniqueConstraint(
-                fields=["date", "topic"], name="unique_date_topic"
-            )
-        ]
+        constraints = [models.UniqueConstraint(fields=["date", "topic"], name="unique_date_topic")]
         ordering = ["-date", "topic"]
 
     def __str__(self):

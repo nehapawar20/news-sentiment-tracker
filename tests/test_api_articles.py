@@ -172,9 +172,7 @@ def test_published_date_filters_are_inclusive(api):
 
     after = api.get(list_url(), {"published_after": "2026-10-12"})
     before = api.get(list_url(), {"published_before": "2026-10-12"})
-    both = api.get(
-        list_url(), {"published_after": "2026-10-12", "published_before": "2026-10-12"}
-    )
+    both = api.get(list_url(), {"published_after": "2026-10-12", "published_before": "2026-10-12"})
 
     assert set(titles(after)) == {"Twelfth", "Thirteenth"}
     assert set(titles(before)) == {"Eleventh", "Twelfth"}

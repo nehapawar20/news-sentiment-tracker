@@ -111,9 +111,9 @@ def test_running_twice_creates_nothing_new():
     run_transform()
 
     assert Article.objects.count() == 2
-    first_run, second_run = PipelineRun.objects.filter(
-        stage=PipelineRun.Stage.TRANSFORM
-    ).order_by("started_at")
+    first_run, second_run = PipelineRun.objects.filter(stage=PipelineRun.Stage.TRANSFORM).order_by(
+        "started_at"
+    )
     assert first_run.records_out == 2
     assert second_run.records_in == 0
     assert second_run.records_out == 0

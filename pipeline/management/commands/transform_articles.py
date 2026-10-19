@@ -34,9 +34,7 @@ class Command(BaseCommand):
         for start in range(0, len(ids), BATCH_SIZE):
             batch_ids = ids[start : start + BATCH_SIZE]
             with transaction.atomic():
-                raws = RawArticle.objects.filter(id__in=batch_ids).select_related(
-                    "source"
-                )
+                raws = RawArticle.objects.filter(id__in=batch_ids).select_related("source")
                 for raw in raws.order_by("id"):
                     try:
                         with transaction.atomic():
@@ -54,21 +52,20 @@ class Command(BaseCommand):
                         rejected[reason] += 1
 
         rejected_total = sum(rejected.values())
-        run.status = (
-            PipelineRun.Status.PARTIAL if errors else PipelineRun.Status.SUCCESS
-        )
+        run.status = PipelineRun.Status.PARTIAL if errors else PipelineRun.Status.SUCCESS
         run.finished_at = timezone.now()
         run.records_in = len(ids)
         run.records_out = created
         run.records_failed = rejected_total
-        run.error_message = (
-            f"{errors} record(s) raised unexpected errors." if errors else ""
-        )
+        run.error_message = f"{errors} record(s) raised unexpected errors." if errors else ""
         run.save()
 
         logger.info(
             "Transform finished: %d in, %d created, %d rejected %s",
-            len(ids), created, rejected_total, dict(rejected),
+            len(ids),
+            created,
+            rejected_total,
+            dict(rejected),
         )
         self.stdout.write(
             self.style.SUCCESS(
@@ -86,9 +83,7 @@ class Command(BaseCommand):
         reason = validate(title, description, raw.url)
         content_hash = ""
         if reason is None:
-            content_hash = hashlib.sha256(
-                normalize_title(title).encode("utf-8")
-            ).hexdigest()
+            content_hash = hashlib.sha256(normalize_title(title).encode("utf-8")).hexdigest()
             if Article.objects.filter(content_hash=content_hash).exists():
                 reason = "duplicate_title"
 

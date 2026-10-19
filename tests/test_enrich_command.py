@@ -133,8 +133,6 @@ def test_running_twice_does_not_reprocess(use_fake):
     calls_after_first_run = len(fake.calls)
     run_command()
 
-    runs = PipelineRun.objects.filter(stage=PipelineRun.Stage.ENRICH).order_by(
-        "started_at"
-    )
+    runs = PipelineRun.objects.filter(stage=PipelineRun.Stage.ENRICH).order_by("started_at")
     assert len(fake.calls) == calls_after_first_run
     assert [run.records_in for run in runs] == [1, 0]

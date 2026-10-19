@@ -42,6 +42,7 @@ class ArticleSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = fields
 
+
 class DateRangeQuerySerializer(serializers.Serializer):
     """Checks the ?from= and ?to= URL parameters (YYYY-MM-DD, inclusive)."""
 
@@ -59,9 +60,7 @@ class DateRangeQuerySerializer(serializers.Serializer):
 
 
 class TrendQuerySerializer(DateRangeQuerySerializer):
-    topic = serializers.ChoiceField(
-        choices=ArticleEnrichment.Topic.choices, required=False
-    )
+    topic = serializers.ChoiceField(choices=ArticleEnrichment.Topic.choices, required=False)
 
 
 class TopicSummarySerializer(serializers.Serializer):
@@ -118,6 +117,4 @@ class HealthSerializer(serializers.Serializer):
     status = serializers.CharField()
     database = serializers.CharField()
     last_successful_run = serializers.DateTimeField(allow_null=True)
-    last_successful_run_by_stage = serializers.DictField(
-        child=serializers.DateTimeField()
-    )
+    last_successful_run_by_stage = serializers.DictField(child=serializers.DateTimeField())
